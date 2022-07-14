@@ -12,7 +12,7 @@ import (
 	"unicode/utf8"
 )
 
-var words = [40]string{
+var words = [47]string{
 	"python","apple","orange",
 	"existansialism","disgusting","christ","yummy","ronaldo",
 	"bitcoin","football","cryptocurrency","corridor","execution",
@@ -20,7 +20,7 @@ var words = [40]string{
 	"cosmon","homeless","psycology","necklace","zebra","rhinoceros",
 	"japan","spider","monnument","pyramid","avenue","antidisestablishmentarianism",
 	"lantern","liberty","shoulder","finger","thumb","locket","monsoone","avadacadabra",
-	"ethereum","pronunciation",
+	"ethereum","pronunciation", "naruto", "neverland", "golang", "france", "hogrider","bottle", "heavymetal",
 }
 
 func getRandomItem()string {
@@ -48,27 +48,27 @@ func contains(x []string, v string) bool {
 }
 
 func dashifyString(secret_word string) string {
-
 	str := ""
-
 	for _, char := range secret_word {
-		var c string
-		c = string(char)
+		c := string(char)
     if x := contains(correct_guesses, c); x {
 			str += c
 		} else {
 			str += "-"
 		}
 	}
-
 	return str
 }
 
 func printGameStatus(secret_word string) {
+	fmt.Println()
+	fmt.Println()
+	fmt.Println()
+	fmt.Println()
 	fmt.Println("#######################################")
-  fmt.Printf("the word has %v letters \n", utf8.RuneCountInString(secret_word))
-  fmt.Printf("the word is: %v \n", dashifyString(secret_word))
-  fmt.Printf("u can make %v more mistakes \n", chances - len(failed_guesses))
+  fmt.Printf("## the word has %v letters \n", utf8.RuneCountInString(secret_word))
+  fmt.Printf("## the word is: %v \n", dashifyString(secret_word))
+  fmt.Printf("## u can make %v more mistakes \n", chances - len(failed_guesses))
   fmt.Println("#######################################")
 }
 
@@ -76,28 +76,11 @@ func main() {
 	secret_word = getRandomItem()
 	fmt.Println("the secret word is " + secret_word)
 
-
-	// utf8.RuneCountInString(s)
-	// reader := bufio.NewReader(os.Stdin)
-	// userGuess, err := reader.ReadString('\n')
-
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-
-	// fmt.Printf("output: %v", userGuess)
-	// x := len(userGuess)
-	// fmt.Print(x)
-
-
 	for !gameOver {
-
-		// if ()
 
 		printGameStatus(secret_word)
 
-		fmt.Println("input text:")
+		fmt.Println("guess a character : ")
 		reader := bufio.NewReader(os.Stdin)
 		line, err := reader.ReadString('\n')
 	
@@ -128,8 +111,8 @@ func main() {
 			// break
 		}
 
-		var dashifiedString string 
-		dashifiedString = dashifyString(secret_word)
+		// var dashifiedString string 
+		dashifiedString := dashifyString(secret_word)
 
 		if hasDash := strings.Contains(dashifiedString, "-"); !hasDash {
 			gameOver = true
@@ -138,6 +121,4 @@ func main() {
 		
 	}
 
-	// fmt.Print())
-	// fmt.Print()
 }
