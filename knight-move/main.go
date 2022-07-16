@@ -1,4 +1,4 @@
-package knightmove
+package main
 
 import (
 	"bufio"
@@ -27,10 +27,32 @@ var cols = [8]string{
 	"1","2","3","4","5","6","7","8",
 }
 
+type ijStruct struct {
+	I int
+	J int
+}
+
+func findIndex(x [8]string, v string) int {
+	for index, element := range x {
+		if (element == v) {
+			return index
+		}
+	}
+	return -1
+}
+
+func contains(x [8]string, v string) bool {
+	for _, s := range x {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
 
 func main() {
 
-	ijarr := [8]IJStruct{
+	ijarr := [8]ijStruct{
 		{
 			I: 1,
 			J: 2,
@@ -66,7 +88,6 @@ func main() {
 	}
 	
 	for true {
-
 		fmt.Println("give me a valid chess cell : ")
 		reader := bufio.NewReader(os.Stdin)
 		line, err := reader.ReadString('\n')
@@ -78,22 +99,23 @@ func main() {
 		char := strings.ToUpper(string(line[0]))
 		num := string(line[1])
 
-		if charExists := Contains(lines, char); !charExists {
+		if charExists := contains(lines, char); !charExists {
 			fmt.Println("the provided line is not a valid line")
 			continue
 		}
 
-		if colExists := Contains(cols, num); !colExists {
+		if colExists := contains(cols, num); !colExists {
 			fmt.Println("the provided line is not a valid column")
 			continue
 		}
 
 		var result []string
 
-		mainI := FindIndex(lines, char)
-		mainJ := FindIndex(cols, num)
+		mainI := findIndex(lines, char)
+		mainJ := findIndex(cols, num)
 
 		for _, s := range ijarr {
+
 
 			newI := mainI + s.I
 			newJ := mainJ + s.J
@@ -114,6 +136,13 @@ func main() {
 		fmt.Println(result)
 		
 	}
+
+
+
+
+	// for x, a := range ijStruct {
+	// 	fmt.Println(a)
+	// }
 
 	fmt.Println("hello world")
 }
