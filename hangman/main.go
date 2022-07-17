@@ -15,7 +15,7 @@ import (
 	"unicode/utf8"
 )
 
-var words = [47]string{
+var words = [50]string{
 	"python", "apple", "orange",
 	"existansialism", "disgusting", "christ", "yummy", "ronaldo",
 	"bitcoin", "football", "cryptocurrency", "corridor", "execution",
@@ -23,7 +23,8 @@ var words = [47]string{
 	"cosmon", "homeless", "psycology", "necklace", "zebra", "rhinoceros",
 	"japan", "spider", "monnument", "pyramid", "avenue", "antidisestablishmentarianism",
 	"lantern", "liberty", "shoulder", "finger", "thumb", "locket", "monsoone", "avadacadabra",
-	"ethereum", "pronunciation", "naruto", "neverland", "golang", "france", "hogrider", "bottle", "heavymetal",
+	"ethereum", "pronunciation", "naruto", "neverland", "golang", "france",
+	"hogrider", "bottle", "heavymetal", "water", "windrunner", "bloodmoon",
 }
 
 func getRandomItem() string {
@@ -82,11 +83,11 @@ func printGameStatus(secret_word string) {
 	fmt.Println("#######################################")
 }
 
-func main() {
-
+func selectWord() string {
 	resp, err := http.Get("https://random-words-api.vercel.app/word")
+	// in case there was an issue with the connection, choose a random word from our own dictionary
 	if err != nil {
-		secret_word = getRandomItem()
+		return getRandomItem()
 	} else {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
@@ -99,8 +100,21 @@ func main() {
 		idk := []byte(sb)
 		json.Unmarshal(idk, &theRes)
 
-		secret_word = strings.ToLower(theRes[0].Word)
+		return strings.ToLower(theRes[0].Word)
 	}
+}
+
+func finishGame(hasWon bool) {
+	if hasWon {
+		fmt.Printf("poor thing u lost, the correct word was -%v- \n", secret_word)
+	} else {
+		fmt.Printf("you won, the word was -%v-", secret_word)
+	}
+}
+
+func main() {
+
+	secret_word = selectWord()
 
 	for !gameOver {
 
@@ -131,17 +145,15 @@ func main() {
 		}
 
 		if len(failed_guesses) == chances {
-			fmt.Printf("poor thing u lost, the correct word was -%v- \n", secret_word)
+			finishGame(false)
 			gameOver = true
-			// break
 		}
 
-		// var dashifiedString string
 		dashifiedString := dashifyString(secret_word)
 
 		if hasDash := strings.Contains(dashifiedString, "-"); !hasDash {
+			finishGame(true)
 			gameOver = true
-			fmt.Printf("you won, the word was -%v-", secret_word)
 		}
 
 	}
